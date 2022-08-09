@@ -20,7 +20,8 @@ kobling = mysql.connector.connect(  host ="localhost",
                                     port = "3306",)
 
 logging.info(f"Sjekker om koblingen fungerer: {kobling.is_connected()=}")
-## Henter ut liste over alle kolonnene
+
+## Henter ut liste over kolonnene
 
 tabell_navn = "lite_tabell"
 
@@ -30,7 +31,9 @@ liste_over_alle_kolonner = [column[0] for column in cursor.fetchall()]
 
 print(f"{liste_over_alle_kolonner = }")
 
-def genererer_tegning():
+## Funksjon som henter data fra og genererer graf
+
+def genererer_graf():
 
     
     def lag_sporring():
@@ -57,7 +60,7 @@ def genererer_tegning():
         logging.debug(f"Differanse mellom data og df for kolonnen \'{kolonne}\': {len(dataene)-len(dataene_df)=}")
         return dataene_df
 
-    def tegne_diagram():
+    def tegn_diagram():
 
         plt.pie(dataene_df["Antall"], labels=dataene_df["Kategori"]);
         #plt.savefig(f'books_read_{kolonne}.png') # Hvis man vil lagre grafen
@@ -68,19 +71,15 @@ def genererer_tegning():
     dataene = hent_dataene() 
     dataene_df = lag_df()
 
-    tegne_diagram()
-
-    
+    tegn_diagram()
 
 
-
+#interessante_kolonner = liste_over_alle_kolonner   # Kan bli mye å generere grafer for alle kolonnene
 interessante_kolonner = ['kategori', 'behstat', 'innfgjel', 'hervang', 'landkode', 'transpm',]
-#interessante_kolonner = ['landkode', 'transpm',]
-#interessante_kolonner = liste_over_alle_kolonner
 
 logging.debug(f'Utfører spørringer mot følgende kolonner: {interessante_kolonner=}')
 
 for kolonne in interessante_kolonner:
 
-    genererer_tegning()
+    genererer_graf()
 
